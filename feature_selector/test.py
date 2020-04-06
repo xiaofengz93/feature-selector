@@ -11,7 +11,7 @@ for i in range(0, 16):
 
 x_train = pd.DataFrame(columns=str_list)
 
-train_path = '/home/xiaofeng.zhang/Workplace/test_cn/all_data/'
+train_path = '/home/xiaofeng.zhang/Workplace/test_cn_nn/all_data/'
 
 PATH = os.getcwd()
 
