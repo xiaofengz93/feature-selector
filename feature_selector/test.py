@@ -11,7 +11,7 @@ for i in range(0, 16):
 
 x_train = pd.DataFrame(columns=str_list)
 
-train_path = '/home/xiaofeng.zhang/Workplace/train_cn/all_data/'
+train_path = '/home/xiaofeng.zhang/Workplace/test_cn/all_data/'
 
 PATH = os.getcwd()
 
@@ -25,8 +25,6 @@ for sample in train_data:
     f_s = sample.split('__')
 
     frame_id = int(f_s[2][6:])
-    if frame_id <= 100:
-        continue
 
     dist_to_ego = f_s[3]
     ego_relation = os.path.splitext(f_s[4])[0]
@@ -63,6 +61,39 @@ for sample in train_data:
     x_train = x_train.append(a_series, ignore_index=True)
 
 fs = FeatureSelector(data = x_train, labels = y_train)
-fs.identify_all(selection_params = {'missing_threshold': 0.5, 'correlation_threshold': 0.7,
-                                    'task': 'regression', 'eval_metric': 'l2',
-                                     'cumulative_importance': 0.9})
+
+fs.identify_missing(missing_threshold=0.6)
+missing_features = fs.ops['missing']
+print('miss_features')
+for f in missing_features:
+    print(f)
+
+fs.missing_stats.head(10)
+
+fs.identify_single_unique()
+single_unique = fs.ops['single_unique']
+
+print('single_unique')
+for f in single_unique:
+    print(f)
+
+fs.identify_collinear(correlation_threshold=0.975)
+correlated_features = fs.ops['collinear']
+
+print('correlated_features')
+for f in correlated_features:
+    print(f)
+
+fs.identify_zero_importance(task = 'classification', eval_metric = 'auc',
+                            n_iterations = 10, early_stopping = True)
+
+zero_importance_features = fs.ops['zero_importance']
+print('zero_importance_features')
+for f in zero_importance_features:
+    print(f)
+
+fs.identify_low_importance(cumulative_importance = 0.99)
+low_importance_features = fs.ops['low_importance']
+print('low_importance_features')
+for f in low_importance_features:
+    print(f)
