@@ -6,8 +6,7 @@ from feature_selector import FeatureSelector
 
 str_list = []
 for i in range(0, 16):
-    for j in range (0, 10):
-        str_list.append(str(i)+'_'+str(j))
+        str_list.append(str(i))
 
 x_train = pd.DataFrame(columns=str_list)
 
@@ -18,8 +17,11 @@ PATH = os.getcwd()
 y_train = []
 
 train_data = os.listdir(train_path)
+count = 0
 
 for sample in train_data:
+    count = count + 1
+    print(count)
     file_path = train_path + sample
 
     f_s = sample.split('__')
@@ -53,9 +55,8 @@ for sample in train_data:
 
         if len(x) == 10 and label != -1:
             y_train.append(label)
-            for sublist in x:
-                for item in sublist:
-                    x_r.append(item)
+            for item in x[0]:
+                x_r.append(item)
 
     a_series = pd.Series(x_r, index=x_train.columns)
     x_train = x_train.append(a_series, ignore_index=True)
