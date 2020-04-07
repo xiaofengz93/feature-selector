@@ -55,8 +55,8 @@ for sample in train_data:
 
         if len(x) == 10 and label != -1:
             y_train.append(label)
-            for item in x[0]:
-                x_r.append(item)
+            for i in range(0, 10):
+                x_r.append(x[0][i] - x[9][i])
 
     a_series = pd.Series(x_r, index=x_train.columns)
     x_train = x_train.append(a_series, ignore_index=True)
